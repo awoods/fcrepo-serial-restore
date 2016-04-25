@@ -24,12 +24,20 @@ def main():
     # load and parse specified configuration settings
     with open(args.config, 'r') as configfile:
         globals().update(yaml.safe_load(configfile))
-
-    print('Ready to load to endpoint at: {0}'.format(REST_ENDPOINT))
-    print('Testing connection to server with provided credentials ...')
     
+    # check connection to fcrepo
+    print('\nReady to load to endpoint at: {0}'.format(REST_ENDPOINT))
+    print('\nTesting connection to server with provided credentials ...')
     resp = requests.get(REST_ENDPOINT, auth=(FEDORA_USER, FEDORA_PASSWORD))
     print(resp)
+    
+    # check the backup tree
+    print('\nScanning repository backup at {0}'.format(BACKUP_LOCATION))
+    backup = [r for r in os.walk(BACKUP_LOCATION)]
+    for path, dirs, files in backup:
+        print("\n{0}".format(path))
+        for n, f in enumerate(files):
+            print("  {0}. {1}".format(n+1, f))
 
 
 if __name__ == "__main__":
