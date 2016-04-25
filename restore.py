@@ -11,6 +11,14 @@ import sys
 import yaml
 
 
+class resource(object):
+    '''class representing an fcrepo resource'''
+    def __init__(self, path):
+        g = rdflib.Graph()
+        self.triples = g.parse(path, format='turtle')
+        print("Resource as {0} triples.".format(len(self.triples)))
+
+
 def main():
     '''Parse args, loop over repository and restore.'''
 
@@ -38,7 +46,9 @@ def main():
         print("\n{0}".format(path))
         for n, f in enumerate(files):
             print("  {0}. {1}".format(n+1, f))
-
+            p = os.path.join(path, f)
+            print("Reading {0} ...".format(p))
+            r = resource(p)
 
 if __name__ == "__main__":
     main()
