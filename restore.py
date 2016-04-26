@@ -17,6 +17,10 @@ class resource(object):
         g = rdflib.Graph()
         self.triples = g.parse(path, format='turtle')
         print("Resource as {0} triples.".format(len(self.triples)))
+        self.repository_path = os.path.relpath(path, BACKUP_LOCATION)
+        print(path)
+        print(self.repository_path)
+        print(os.path.dirname(path))
 
 
 def main():

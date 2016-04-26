@@ -1,8 +1,12 @@
 # the fcrepo REST endpoint
 REST_ENDPOINT: http://localhost:8080/fcrepo/rest
 
+# the path to tree of serialized repository resources
 BACKUP_LOCATION: testdata/
 
 # credentials to use for your fcrepo
 FEDORA_USER: fedoraAdmin
 FEDORA_PASSWORD: secret3
+
+# namespaces to filter
+FILTER_NAMESPACES: []
