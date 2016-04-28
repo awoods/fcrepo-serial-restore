@@ -1,0 +1,47 @@
+@prefix audit: <http://fedora.info/definitions/v4/audit#> .
+@prefix authz: <http://fedora.info/definitions/v4/authorization#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix ebucore: <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#> .
+@prefix fedora: <http://fedora.info/definitions/v4/repository#> .
+@prefix fedoraconfig: <http://fedora.info/definitions/v4/config#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix image: <http://www.modeshape.org/images/1.0> .
+@prefix jcr: <http://www.jcp.org/jcr/1.0> .
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+@prefix mix: <http://www.jcp.org/jcr/mix/1.0> .
+@prefix mode: <http://www.modeshape.org/1.0> .
+@prefix ns001: <http://pcdm.org/models#> .
+@prefix ns002: <http://www.w3.org/ns/auth/acl#> .
+@prefix ns1: <http://www.iana.org/assignments/relation/> .
+@prefix nt: <http://www.jcp.org/jcr/nt/1.0> .
+@prefix ore: <http://www.openarchives.org/ore/terms/> .
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sv: <http://www.jcp.org/jcr/sv/1.0> .
+@prefix test: <info:fedora/test/> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xs: <http://www.w3.org/2001/XMLSchema> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix xsi: <http://www.w3.org/2001/XMLSchema-instance> .
+
+<http://localhost:8080/fcrepo/rest/objects/umd98882/files/pcb-461-205_-002-tx001.jpg> a fedora:Binary,
+        fedora:Resource,
+        ns001:File,
+        ldp:NonRDFSource ;
+    fedora:created "2016-04-22T19:59:13.288000+00:00"^^xsd:dateTime ;
+    fedora:createdBy "fedoraAdmin"^^xsd:string ;
+    fedora:hasAccessRoles <http://localhost:8080/fcrepo/rest/objects%2Fumd98882%2Ffiles%2Fpcb-461-205_-002-tx001.jpg%2Fjcr:content/fcr:accessroles> ;
+    fedora:hasFixityService <http://localhost:8080/fcrepo/rest/objects/umd98882/files/pcb-461-205_-002-tx001.jpg/fcr:fixity> ;
+    fedora:hasParent <http://localhost:8080/fcrepo/rest/objects/umd98882/files> ;
+    fedora:lastModified "2016-04-22T19:59:15.404000+00:00"^^xsd:dateTime ;
+    fedora:lastModifiedBy "fedoraAdmin"^^xsd:string ;
+    fedora:numberOfChildren "0"^^xsd:long ;
+    fedora:writable true ;
+    ebucore:filename ""^^xsd:string ;
+    ebucore:hasMimeType "image/jpeg"^^xsd:string ;
+    ns1:describedby <http://localhost:8080/fcrepo/rest/objects/umd98882/files/pcb-461-205_-002-tx001.jpg/fcr:metadata> ;
+    premis:hasMessageDigest <urn:sha1:09019d65f60c09b0a2fd5b7d78679ec25a9e308b> ;
+    premis:hasSize "248559"^^xsd:long .
+

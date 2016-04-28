@@ -1,5 +1,5 @@
 # the fcrepo REST endpoint
-REST_ENDPOINT: http://localhost:8080/fcrepo/rest
+REST_ENDPOINT: http://localhost:8080/fcrepo/rest/
 
 # the path to tree of serialized repository resources
 BACKUP_LOCATION: testdata/

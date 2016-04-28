@@ -17,10 +17,14 @@ class resource(object):
         g = rdflib.Graph()
         self.triples = g.parse(path, format='turtle')
         print("Resource as {0} triples.".format(len(self.triples)))
-        self.repository_path = os.path.relpath(path, BACKUP_LOCATION)
-        print(path)
-        print(self.repository_path)
-        print(os.path.dirname(path))
+        basename = os.path.basename(path)
+        dirpath = os.path.relpath(path, BACKUP_LOCATION)
+        self.uri = os.path.join(REST_ENDPOINT, dirpath, basename)
+        print(self.uri)
+    
+    def load(self):
+        self.triples.serialize("data.rdf", format="turtle")
+        requests.put(self.uri, data="data.rdf")
 
 
 def main():
@@ -53,6 +57,7 @@ def main():
             p = os.path.join(path, f)
             print("Reading {0} ...".format(p))
             r = resource(p)
+            r.load()
 
 if __name__ == "__main__":
     main()
