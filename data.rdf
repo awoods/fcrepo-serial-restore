@@ -12,7 +12,6 @@
 @prefix mode: <http://www.modeshape.org/1.0> .
 @prefix ns001: <http://pcdm.org/models#> .
 @prefix ns002: <http://www.w3.org/ns/auth/acl#> .
-@prefix ns1: <http://www.iana.org/assignments/relation/> .
 @prefix nt: <http://www.jcp.org/jcr/nt/1.0> .
 @prefix ore: <http://www.openarchives.org/ore/terms/> .
 @prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
@@ -26,22 +25,21 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix xsi: <http://www.w3.org/2001/XMLSchema-instance> .
 
-<http://localhost:8080/fcrepo/rest/objects/umd98882/files/pcb-461-205_-002-tx001.jpg> a fedora:Binary,
+<http://localhost:8080/fcrepo/rest/collections> a fedora:Container,
         fedora:Resource,
-        ns001:File,
-        ldp:NonRDFSource ;
-    fedora:created "2016-04-22T19:59:13.288000+00:00"^^xsd:dateTime ;
+        ldp:Container,
+        ldp:RDFSource ;
+    fedora:created "2016-04-22T19:58:57.961000+00:00"^^xsd:dateTime ;
     fedora:createdBy "fedoraAdmin"^^xsd:string ;
-    fedora:hasAccessRoles <http://localhost:8080/fcrepo/rest/objects%2Fumd98882%2Ffiles%2Fpcb-461-205_-002-tx001.jpg%2Fjcr:content/fcr:accessroles> ;
-    fedora:hasFixityService <http://localhost:8080/fcrepo/rest/objects/umd98882/files/pcb-461-205_-002-tx001.jpg/fcr:fixity> ;
-    fedora:hasParent <http://localhost:8080/fcrepo/rest/objects/umd98882/files> ;
-    fedora:lastModified "2016-04-22T19:59:15.404000+00:00"^^xsd:dateTime ;
+    fedora:exportsAs <http://localhost:8080/fcrepo/rest/collections/fcr:export?format=jcr/xml> ;
+    fedora:hasAccessRoles <http://localhost:8080/fcrepo/rest/collections/fcr:accessroles> ;
+    fedora:hasParent <http://localhost:8080/fcrepo/rest/> ;
+    fedora:lastModified "2016-04-22T19:58:59.116000+00:00"^^xsd:dateTime ;
     fedora:lastModifiedBy "fedoraAdmin"^^xsd:string ;
-    fedora:numberOfChildren "0"^^xsd:long ;
+    fedora:numberOfChildren "2"^^xsd:long ;
     fedora:writable true ;
-    ebucore:filename ""^^xsd:string ;
-    ebucore:hasMimeType "image/jpeg"^^xsd:string ;
-    ns1:describedby <http://localhost:8080/fcrepo/rest/objects/umd98882/files/pcb-461-205_-002-tx001.jpg/fcr:metadata> ;
-    premis:hasMessageDigest <urn:sha1:09019d65f60c09b0a2fd5b7d78679ec25a9e308b> ;
-    premis:hasSize "248559"^^xsd:long .
+    ldp:contains <http://localhost:8080/fcrepo/rest/collections/umd11575>,
+        <http://localhost:8080/fcrepo/rest/collections/umd212748> .
+
+<http://localhost:8080/fcrepo/rest/collections/fcr:export?format=jcr/xml> dc:format <http://fedora.info/definitions/v4/repository#jcr/xml> .
 

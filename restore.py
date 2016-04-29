@@ -6,6 +6,7 @@ import argparse
 import logging
 import os
 import rdflib
+from rdflib.namespace import RDF
 import requests
 import sys
 import yaml
@@ -17,19 +18,21 @@ class resource(object):
         g = rdflib.Graph()
         self.triples = g.parse(path, format='turtle')
         print("Resource as {0} triples.".format(len(self.triples)))
-        basename = os.path.basename(path)
-        dirpath = os.path.relpath(path, BACKUP_LOCATION)
-        self.uri = os.path.join(REST_ENDPOINT, dirpath, basename)
-        print(self.uri)
+        self.path = uri = set([s for s,p,o in g.triples( 
+            (None, RDF.type, None))])
+        print(self.path)
+
     
     def load(self):
         self.triples.serialize("data.rdf", format="turtle")
-        requests.put(self.uri, data="data.rdf")
-
+        response = requests.put(REST_ENDPOINT, data="data.rdf")
+        print(response)
+        if response.raise_for_status():
+            sys.exit()
+            
 
 def main():
     '''Parse args, loop over repository and restore.'''
-
     # Parse command line arguments
     parser = argparse.ArgumentParser(
         description='Restore serialized Fedora repository.')
@@ -58,6 +61,7 @@ def main():
             print("Reading {0} ...".format(p))
             r = resource(p)
             r.load()
+
 
 if __name__ == "__main__":
     main()
