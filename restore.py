@@ -5,31 +5,40 @@ from __future__ import print_function
 import argparse
 import logging
 import os
-import rdflib
-from rdflib.namespace import RDF
+from rdflib import Graph as graph
 import requests
+from io import BytesIO
 import sys
 import yaml
 
 
-class resource(object):
-    '''class representing an fcrepo resource'''
-    def __init__(self, path):
-        g = rdflib.Graph()
-        self.triples = g.parse(path, format='turtle')
-        print("Resource as {0} triples.".format(len(self.triples)))
-        self.path = uri = set([s for s,p,o in g.triples( 
-            (None, RDF.type, None))])
-        print(self.path)
+class fcrepo_resource(graph):
+    '''subclass of an rdflib.Graph representing a Fedora resource'''
+    def __init__(self, filepath, uri):
+        graph.__init__(self)
+        self.parse(filepath, format='turtle')
+        self.filename = os.path.basename(filepath)
+        self.uri = uri
+        print(" - Resource {0} has {1} triples.".format(
+                                                    self.filename, len(self)))
 
-    
-    def load(self):
-        self.triples.serialize("data.rdf", format="turtle")
-        response = requests.put(REST_ENDPOINT, data="data.rdf")
-        print(response)
-        if response.raise_for_status():
-            sys.exit()
-            
+    def turtle(self):
+        return self.serialize(format='turtle')
+
+    def deposit(self):
+        data = BytesIO(self.turtle())
+        response = requests.put(self.uri, 
+                                data=data,
+                                auth=(FEDORA_USER, FEDORA_PASSWORD)
+                                )
+        return response
+
+    def filter(self, ns):
+        print("Filtering triples in namespace {0} ...".format(ns))
+        for triple in self:
+            if triple[1].startswith(ns):
+                self.remove(triple)
+
 
 def main():
     '''Parse args, loop over repository and restore.'''
@@ -40,27 +49,42 @@ def main():
         help='relative or absolute path to the YAML config file')
     args = parser.parse_args()
     
+    # print header
+    title = "| FCREPO SERIALIZATION RESTORATION |"
+    border = "-" * len(title)
+    print("\n".join(["", border, title, border]))
+    
     # load and parse specified configuration settings
     with open(args.config, 'r') as configfile:
         globals().update(yaml.safe_load(configfile))
     
     # check connection to fcrepo
-    print('\nReady to load to endpoint at: {0}'.format(REST_ENDPOINT))
-    print('\nTesting connection to server with provided credentials ...')
-    resp = requests.get(REST_ENDPOINT, auth=(FEDORA_USER, FEDORA_PASSWORD))
-    print(resp)
+    print('Ready to load to endpoint => {0}'.format(REST_ENDPOINT))
+    print('Testing connection with provided credentials => ', end='')
+    response = requests.get(REST_ENDPOINT, 
+                            auth=(FEDORA_USER, FEDORA_PASSWORD)
+                            )
+    print(response)
+    
+    # server-managed namespaces to filter
+    server_managed = FILTER_NAMESPACES.values()
     
     # check the backup tree
-    print('\nScanning repository backup at {0}'.format(BACKUP_LOCATION))
-    backup = [r for r in os.walk(BACKUP_LOCATION)]
-    for path, dirs, files in backup:
-        print("\n{0}".format(path))
-        for n, f in enumerate(files):
-            print("  {0}. {1}".format(n+1, f))
-            p = os.path.join(path, f)
-            print("Reading {0} ...".format(p))
-            r = resource(p)
-            r.load()
+    print('Scanning serialization tree => {0}'.format(BACKUP_LOCATION))
+    
+    # loop over files, read as graph, filter, PUT to fcrepo
+    for root, dirs, files in os.walk(BACKUP_LOCATION):
+        print("\n{0}".format(root))
+        for f in files:
+            if f.endswith('.ttl'):
+                filepath = os.path.join(root, f)
+                repopath = os.path.relpath(filepath, BACKUP_LOCATION)
+                uri = os.path.join(REST_ENDPOINT, repopath)
+                resource = fcrepo_resource(filepath, uri)
+                for nspace in server_managed:
+                    resource.filter(nspace)
+                print(resource.turtle())
+                print(resource.deposit())
 
 
 if __name__ == "__main__":
