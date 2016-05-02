@@ -29,11 +29,10 @@ class fcrepo_resource(graph):
     # PUT resource to specified fcrepo
     def deposit(self):
         data = BytesIO(self.turtle())
-        headers = {'content-type': 'application/turtle'}
+       # headers = {'content-type': 'application/turtle'}
         response = requests.put(self.uri, 
                                 data = data,
-                                auth = (FEDORA_USER, FEDORA_PASSWORD)
-                                headers = headers)
+                                auth = (FEDORA_USER, FEDORA_PASSWORD))
         return response
     
     # filter out triples in with predicates in 'server-managed' namespaces
@@ -41,6 +40,9 @@ class fcrepo_resource(graph):
         print("Filtering triples in namespace {0} ...".format(ns))
         for triple in self:
             if triple[1].startswith(ns):
+                self.remove(triple)
+            elif triple[0].endswith('fcr:export?format=jcr/xml'):
+                print("Removing resource export triple...")
                 self.remove(triple)
 
 

@@ -1,0 +1,7 @@
+@prefix fedora: <http://fedora.info/definitions/v4/repository#> .
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+
+<http://localhost:8080/fcrepo/rest/foobarbaz> a fedora:Container,
+        fedora:Resource,
+        ldp:Container,
+        ldp:RDFSource .
