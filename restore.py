@@ -21,18 +21,22 @@ class fcrepo_resource(graph):
         self.uri = uri
         print(" - Resource {0} has {1} triples.".format(
                                                     self.filename, len(self)))
-
+    
+    # serialize resource as turtle
     def turtle(self):
         return self.serialize(format='turtle')
-
+    
+    # PUT resource to specified fcrepo
     def deposit(self):
         data = BytesIO(self.turtle())
+        headers = {'content-type': 'application/turtle'}
         response = requests.put(self.uri, 
-                                data=data,
-                                auth=(FEDORA_USER, FEDORA_PASSWORD)
-                                )
+                                data = data,
+                                auth = (FEDORA_USER, FEDORA_PASSWORD)
+                                headers = headers)
         return response
-
+    
+    # filter out triples in with predicates in 'server-managed' namespaces
     def filter(self, ns):
         print("Filtering triples in namespace {0} ...".format(ns))
         for triple in self:
@@ -58,16 +62,15 @@ def main():
     with open(args.config, 'r') as configfile:
         globals().update(yaml.safe_load(configfile))
     
-    # check connection to fcrepo
+    # the server-managed namespaces to filter
+    server_managed = FILTER_NAMESPACES.values()
+    
+    # check the connection to fcrepo
     print('Ready to load to endpoint => {0}'.format(REST_ENDPOINT))
     print('Testing connection with provided credentials => ', end='')
     response = requests.get(REST_ENDPOINT, 
-                            auth=(FEDORA_USER, FEDORA_PASSWORD)
-                            )
+                            auth=(FEDORA_USER, FEDORA_PASSWORD))
     print(response)
-    
-    # server-managed namespaces to filter
-    server_managed = FILTER_NAMESPACES.values()
     
     # check the backup tree
     print('Scanning serialization tree => {0}'.format(BACKUP_LOCATION))
